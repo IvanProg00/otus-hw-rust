@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Test echo
-        run: echo ${{ github.ref_name }}
+        run: echo ${{ github.head_ref }}
 
       - name: Check out code
         uses: actions/checkout@v3
