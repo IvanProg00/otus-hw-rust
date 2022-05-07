@@ -6,4 +6,4 @@
 
 ## Ссылки
 
-- [Course page](https://otus.ru/lessons/rust-developer/)
+- [Страница курса](https://otus.ru/lessons/rust-developer/)
