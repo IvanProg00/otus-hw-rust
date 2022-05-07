@@ -18,9 +18,12 @@ jobs:
           args: "."
 
   rust_lints:
-    if: startsWith(github.ref_name, 'hw')
+    # if: startsWith(github.ref_name, 'hw')
     runs-on: ubuntu-latest
     steps:
+      - name: Test echo
+        run: echo ${{ github.ref_name }}
+
       - name: Check out code
         uses: actions/checkout@v3
 
