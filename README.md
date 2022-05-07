@@ -1,7 +1,9 @@
-# Rust Developer
+# Курс OTUS «Rust Developer»
 
-## Homework
+## Домашние задания
 
-## Links
+- [Сломанный `FizzBuzz`](hw01/)
+
+## Ссылки
 
 - [Course page](https://otus.ru/lessons/rust-developer/)
