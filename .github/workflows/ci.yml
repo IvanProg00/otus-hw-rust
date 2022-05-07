@@ -6,13 +6,13 @@ on:
   pull_request:
 
 jobs:
-  markdown_lint:
+  lint_markdown:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
-      - name: Lint Markdown file
+      - name: Markdown Linter
         # uses: docker://avtodev/markdown-lint:v1
         uses: avto-dev/markdown-lint@v1
         with:
