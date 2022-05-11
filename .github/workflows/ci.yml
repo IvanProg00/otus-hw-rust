@@ -18,7 +18,7 @@ jobs:
           args: "."
 
   rust_lints:
-    if: startsWith(github.ref, 'hw')
+    if: startsWith(github.head_ref, 'hw')
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
@@ -44,13 +44,38 @@ jobs:
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
       - name: Run cargo fmt
-        uses: actions-rs/cargo@v1
-        with:
-          command: fmt
-          args: --all -- --check
+        run: cargo fmt --all -- --check
+        working-directory: ${{ github.head_ref }}
 
       - name: Run cargo clippy
-        uses: actions-rs/cargo@v1
+        run: cargo clippy --all-targets -- -D warnings
+        working-directory: ${{ github.head_ref }}
+
+  build:
+    if: startsWith(github.head_ref, 'hw')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Install stable toolchain
+        uses: actions-rs/toolchain@v1
         with:
-          command: clippy
-          args: --all-targets -- -D warnings
+          profile: minimal
+          toolchain: stable
+          override: true
+
+      - name: Cache cargo
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Run cargo build
+        run: cargo build --release --all-features
+        working-directory: ${{ github.head_ref }}
