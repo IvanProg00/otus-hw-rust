@@ -11,6 +11,40 @@ fn main() {
         println!("Room name: {}", r.get_name());
     }
 
-    let mut r = h.list_rooms()[0];
-    r.push_device(String::from("device 1")).unwrap();
+    let room1 = match h.list_rooms_mut().get_mut(0) {
+        Some(r) => r,
+        None => panic!("Room not found"),
+    };
+    room1.push_device(String::from("device 1")).unwrap();
+
+    for d in room1.list_devices() {
+        println!(
+            "Room name: {}; Device name: {}",
+            room1.get_name(),
+            d.get_name()
+        );
+    }
+
+    let room2 = match h.get_room_mut(1) {
+        Some(r) => r,
+        None => panic!("Room not found"),
+    };
+
+    for i in 1..6 {
+        room2.push_device(format!("device {}", i)).unwrap();
+    }
+
+    for d in room2.list_devices().iter() {
+        println!(
+            "Room name: {}; Device name: {}",
+            room2.get_name(),
+            d.get_name()
+        );
+    }
+
+    room2.push_device(String::from("repeat name")).unwrap();
+    match room2.push_device(String::from("repeat name")) {
+        Ok(_) => panic!("Expected panic"),
+        Err(e) => println!("Received error: {}", e),
+    }
 }

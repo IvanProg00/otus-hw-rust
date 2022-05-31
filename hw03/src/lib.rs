@@ -1,18 +1,18 @@
-pub struct House<'a> {
+pub struct House {
     name: String,
-    rooms: Vec<Room<'a>>,
+    rooms: Vec<Room>,
 }
 
-pub struct Room<'a> {
+pub struct Room {
     name: String,
-    devices: Vec<&'a Device>,
+    devices: Vec<Device>,
 }
 
 pub struct Device {
     name: String,
 }
 
-impl<'a> House<'a> {
+impl House {
     pub fn new(name: String) -> Self {
         House {
             name,
@@ -40,12 +40,24 @@ impl<'a> House<'a> {
         Ok(())
     }
 
-    pub fn list_rooms(&self) -> &Vec<Room> {
+    pub fn list_rooms(&self) -> &[Room] {
         &self.rooms
+    }
+
+    pub fn list_rooms_mut(&mut self) -> &mut [Room] {
+        &mut self.rooms
+    }
+
+    pub fn get_room(&self, index: usize) -> Option<&Room> {
+        self.rooms.get(index)
+    }
+
+    pub fn get_room_mut(&mut self, index: usize) -> Option<&mut Room> {
+        self.rooms.get_mut(index)
     }
 }
 
-impl<'a> Room<'a> {
+impl Room {
     pub fn get_name(&self) -> &str {
         self.name.as_str()
     }
@@ -57,15 +69,19 @@ impl<'a> Room<'a> {
             }
         }
 
-        let dev = Device { name: name.clone() };
+        let dev = Device { name };
 
-        self.devices.push(&dev);
+        self.devices.push(dev);
 
         Ok(())
     }
 
-    pub fn list_devices(&self) -> &Vec<&Device> {
+    pub fn list_devices(&self) -> &[Device] {
         &self.devices
+    }
+
+    pub fn get_device(&self, index: usize) -> Option<&Device> {
+        self.devices.get(index)
     }
 }
 
