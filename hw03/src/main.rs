@@ -47,4 +47,9 @@ fn main() {
         Ok(_) => panic!("Expected panic"),
         Err(e) => println!("Received error: {}", e),
     }
+
+    h.push_room(String::from("room 3")).unwrap();
+
+    println!("--------------------");
+    println!("{}", h.get_report());
 }

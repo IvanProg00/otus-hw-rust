@@ -55,6 +55,27 @@ impl House {
     pub fn get_room_mut(&mut self, index: usize) -> Option<&mut Room> {
         self.rooms.get_mut(index)
     }
+
+    pub fn get_report(&self) -> String {
+        let mut res = format!("House \"{}\":", self.get_name());
+
+        for r in self.list_rooms().iter() {
+            res.push('\n');
+            res.push_str(format!("\tRoom \"{}\":", r.get_name()).as_str());
+
+            if r.list_devices().is_empty() {
+                res.push_str("\n\t\tdevices not found");
+                continue;
+            }
+
+            for d in r.list_devices().iter() {
+                res.push('\n');
+                res.push_str(format!("\t\tDevice \"{}\"", d.get_name()).as_str());
+            }
+        }
+
+        res
+    }
 }
 
 impl Room {
