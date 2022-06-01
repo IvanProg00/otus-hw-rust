@@ -1,3 +1,14 @@
+pub trait IntelligentHouse {
+    fn new(name: String) -> Self;
+    fn get_name(&self) -> &str;
+    fn push_room(&mut self, name: String) -> Result<(), String>;
+    fn list_rooms(&self) -> &[Room];
+    fn list_rooms_mut(&mut self) -> &mut [Room];
+    fn get_room(&self, index: usize) -> Option<&Room>;
+    fn get_room_mut(&mut self, index: usize) -> Option<&mut Room>;
+    fn create_report(&self) -> String;
+}
+
 pub struct House {
     name: String,
     rooms: Vec<Room>,
@@ -12,19 +23,19 @@ pub struct Device {
     name: String,
 }
 
-impl House {
-    pub fn new(name: String) -> Self {
+impl IntelligentHouse for House {
+    fn new(name: String) -> Self {
         House {
             name,
             rooms: Vec::new(),
         }
     }
 
-    pub fn get_name(&self) -> &str {
+    fn get_name(&self) -> &str {
         self.name.as_str()
     }
 
-    pub fn push_room(&mut self, name: String) -> Result<(), String> {
+    fn push_room(&mut self, name: String) -> Result<(), String> {
         for r in self.rooms.iter() {
             if r.name == name {
                 return Err(String::from("room with this name already exists"));
@@ -40,23 +51,23 @@ impl House {
         Ok(())
     }
 
-    pub fn list_rooms(&self) -> &[Room] {
+    fn list_rooms(&self) -> &[Room] {
         &self.rooms
     }
 
-    pub fn list_rooms_mut(&mut self) -> &mut [Room] {
+    fn list_rooms_mut(&mut self) -> &mut [Room] {
         &mut self.rooms
     }
 
-    pub fn get_room(&self, index: usize) -> Option<&Room> {
+    fn get_room(&self, index: usize) -> Option<&Room> {
         self.rooms.get(index)
     }
 
-    pub fn get_room_mut(&mut self, index: usize) -> Option<&mut Room> {
+    fn get_room_mut(&mut self, index: usize) -> Option<&mut Room> {
         self.rooms.get_mut(index)
     }
 
-    pub fn get_report(&self) -> String {
+    fn create_report(&self) -> String {
         let mut res = format!("House \"{}\":", self.get_name());
 
         for r in self.list_rooms().iter() {

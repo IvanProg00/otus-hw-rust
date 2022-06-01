@@ -1,7 +1,7 @@
-use intelligent_house_2::House;
+use intelligent_house_2::{House, IntelligentHouse};
 
 fn main() {
-    let mut h = House::new(String::from("house 1"));
+    let mut h: House = IntelligentHouse::new(String::from("house 1"));
     println!("House name: {}", h.get_name());
 
     h.push_room(String::from("room 1")).unwrap();
@@ -51,5 +51,5 @@ fn main() {
     h.push_room(String::from("room 3")).unwrap();
 
     println!("--------------------");
-    println!("{}", h.get_report());
+    println!("{}", h.create_report());
 }
