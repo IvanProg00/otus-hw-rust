@@ -17,6 +17,9 @@ jobs:
         with:
           args: "."
 
+      - name: test run
+        run: echo ${{ github.ref_name }}
+
   rust_lints:
     if: startsWith(github.ref_name, 'hw')
     runs-on: ubuntu-latest
