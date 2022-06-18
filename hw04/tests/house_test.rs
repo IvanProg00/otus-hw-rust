@@ -55,7 +55,7 @@ fn test_house_new_with_devices() {
 }
 
 #[test]
-fn test_get_report() {
+fn test_create_report() {
     let mut h: House = IntelligentHouse::new(String::from("house 2"));
 
     assert_eq!(h.push_room(String::from("room 1")), Ok(()));
@@ -116,4 +116,21 @@ fn test_get_report() {
         h.get_room(1).unwrap().get_device(3).unwrap().get_name(),
         "device 7"
     );
+
+    assert_eq!(
+        h.create_report(),
+        String::from(
+            "House \"house 2\":
+\tRoom \"room 1\":
+\t\tDevice \"device 4\"
+\t\tDevice \"device 2\"
+\t\tDevice \"device 1\"
+\t\tDevice \"device 3\"
+\tRoom \"room 2\":
+\t\tDevice \"device 9\"
+\t\tDevice \"device 8\"
+\t\tDevice \"device 6\"
+\t\tDevice \"device 7\""
+        )
+    )
 }
