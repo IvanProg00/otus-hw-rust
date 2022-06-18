@@ -18,7 +18,7 @@ jobs:
           args: "."
 
   rust_lints:
-    if: startsWith(github.head_ref, 'hw')
+    if: startsWith(github.ref_name, 'hw')
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
@@ -45,14 +45,14 @@ jobs:
 
       - name: Run cargo fmt
         run: cargo fmt --all -- --check
-        working-directory: ${{ github.head_ref }}
+        working-directory: ${{ github.ref_name }}
 
       - name: Run cargo clippy
         run: cargo clippy --all-targets -- -D warnings
-        working-directory: ${{ github.head_ref }}
+        working-directory: ${{ github.ref_name }}
 
   test:
-    if: startsWith(github.head_ref, 'hw')
+    if: startsWith(github.ref_name, 'hw')
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
@@ -78,10 +78,10 @@ jobs:
 
       - name: Run cargo build
         run: cargo test --workspace
-        working-directory: ${{ github.head_ref }}
+        working-directory: ${{ github.ref_name }}
 
   build:
-    if: startsWith(github.head_ref, 'hw')
+    if: startsWith(github.ref_name, 'hw')
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
@@ -107,4 +107,4 @@ jobs:
 
       - name: Run cargo build
         run: cargo build --release --all-features
-        working-directory: ${{ github.head_ref }}
+        working-directory: ${{ github.ref_name }}
