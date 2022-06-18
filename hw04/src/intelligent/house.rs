@@ -81,3 +81,70 @@ impl IntelligentHouse for House {
         res
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::intelligent::room::Room;
+
+    #[test]
+    fn test_get_name() {
+        let tests = [
+            ("house name 1", "house name 1"),
+            ("world", "world"),
+            ("rust", "rust"),
+        ];
+
+        for (i, &(name, expected)) in tests.iter().enumerate() {
+            let r = House {
+                name: String::from(name),
+                rooms: Vec::new(),
+            };
+
+            assert_eq!(r.get_name(), expected, "test-{}", i);
+        }
+    }
+
+    #[test]
+    fn test_push_room() {
+        let tests = [(
+            vec![Room {
+                name: String::from("room 84394"),
+                devices: Vec::new(),
+            }],
+            "room 14843",
+        )];
+
+        for (rooms, push_room) in tests {
+            let mut r = House {
+                name: String::new(),
+                rooms,
+            };
+
+            let res = r.push_room(String::from(push_room));
+            assert_eq!(res, Ok(()));
+        }
+    }
+
+    #[test]
+    fn test_push_room_error_exists() {
+        let tests = [(
+            vec![Room {
+                name: String::from("room 74894"),
+                devices: Vec::new(),
+            }],
+            "room 74894",
+        )];
+
+        for (rooms, push_room) in tests {
+            let mut r = House {
+                name: String::new(),
+                rooms,
+            };
+
+            let res = r.push_room(String::from(push_room));
+            assert!(res.is_err());
+            assert_eq!(res, Err(String::from("room with this name already exists")))
+        }
+    }
+}

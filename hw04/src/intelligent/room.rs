@@ -35,9 +35,8 @@ impl Room {
 
 #[cfg(test)]
 mod tests {
-    use crate::intelligent::device::Device;
-
     use super::*;
+    use crate::intelligent::device::Device;
 
     #[test]
     fn test_get_name() {
@@ -73,7 +72,7 @@ mod tests {
             };
 
             let res = r.push_device(String::from(push_device));
-            assert!(res.is_ok());
+            assert_eq!(res, Ok(()));
         }
     }
 
