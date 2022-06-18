@@ -32,3 +32,72 @@ impl Room {
         self.devices.get(index)
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::intelligent::device::Device;
+
+    use super::*;
+
+    #[test]
+    fn test_get_name() {
+        let tests = [
+            ("room name 1", "room name 1"),
+            ("world", "world"),
+            ("rust", "rust"),
+        ];
+
+        for (i, &(name, expected)) in tests.iter().enumerate() {
+            let r = Room {
+                name: String::from(name),
+                devices: Vec::new(),
+            };
+
+            assert_eq!(r.get_name(), expected, "test-{}", i);
+        }
+    }
+
+    #[test]
+    fn test_push_device() {
+        let tests = [(
+            vec![Device {
+                name: String::from("device 59439"),
+            }],
+            "device 43948",
+        )];
+
+        for (devices, push_device) in tests {
+            let mut r = Room {
+                name: String::new(),
+                devices,
+            };
+
+            let res = r.push_device(String::from(push_device));
+            assert!(res.is_ok());
+        }
+    }
+
+    #[test]
+    fn test_push_device_error_exists() {
+        let tests = [(
+            vec![Device {
+                name: String::from("device 74894"),
+            }],
+            "device 74894",
+        )];
+
+        for (devices, push_device) in tests {
+            let mut r = Room {
+                name: String::new(),
+                devices,
+            };
+
+            let res = r.push_device(String::from(push_device));
+            assert!(res.is_err());
+            assert_eq!(
+                res,
+                Err(String::from("device with this name already exists"))
+            )
+        }
+    }
+}
