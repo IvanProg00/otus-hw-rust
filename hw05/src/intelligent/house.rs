@@ -1,9 +1,9 @@
-use crate::intelligent::room;
+use crate::intelligent::{error, room};
 
 pub trait IntelligentHouse {
     fn new(name: String) -> Self;
     fn get_name(&self) -> &str;
-    fn push_room(&mut self, name: String) -> Result<(), String>;
+    fn push_room(&mut self, name: String) -> Result<(), error::IntelligentError>;
     fn list_rooms(&self) -> &[room::Room];
     fn list_rooms_mut(&mut self) -> &mut [room::Room];
     fn get_room(&self, index: usize) -> Option<&room::Room>;
@@ -28,10 +28,12 @@ impl IntelligentHouse for House {
         self.name.as_str()
     }
 
-    fn push_room(&mut self, name: String) -> Result<(), String> {
+    fn push_room(&mut self, name: String) -> Result<(), error::IntelligentError> {
         for r in self.rooms.iter() {
             if r.name == name {
-                return Err(String::from("room with this name already exists"));
+                return Err(error::IntelligentError {
+                    err: error::IntelligentErrors::RoomWithThisNameAlreadyExists,
+                });
             }
         }
 
@@ -122,7 +124,7 @@ mod tests {
             };
 
             let res = r.push_room(String::from(push_room));
-            assert_eq!(res, Ok(()));
+            assert!(res.is_ok());
         }
     }
 
@@ -134,9 +136,10 @@ mod tests {
                 devices: Vec::new(),
             }],
             "room 74894",
+            error::IntelligentErrors::RoomWithThisNameAlreadyExists,
         )];
 
-        for (rooms, push_room) in tests {
+        for (rooms, push_room, expected_err) in tests {
             let mut r = House {
                 name: String::new(),
                 rooms,
@@ -144,7 +147,9 @@ mod tests {
 
             let res = r.push_room(String::from(push_room));
             assert!(res.is_err());
-            assert_eq!(res, Err(String::from("room with this name already exists")))
+
+            let expected = error::IntelligentError { err: expected_err };
+            assert_eq!(res.unwrap_err().to_string(), expected.to_string());
         }
     }
 }
