@@ -1,4 +1,4 @@
-use crate::intelligent::device;
+use crate::intelligent::{device, error};
 
 pub struct Room {
     pub name: String,
@@ -10,10 +10,12 @@ impl Room {
         self.name.as_str()
     }
 
-    pub fn push_device(&mut self, name: String) -> Result<(), String> {
+    pub fn push_device(&mut self, name: String) -> Result<(), error::IntelligentError> {
         for d in self.devices.iter() {
             if d.name == name {
-                return Err(String::from("device with this name already exists"));
+                return Err(error::IntelligentError {
+                    err: error::IntelligentErrors::DeviceWithThisNameAlreadyExists,
+                });
             }
         }
 
@@ -72,7 +74,7 @@ mod tests {
             };
 
             let res = r.push_device(String::from(push_device));
-            assert_eq!(res, Ok(()));
+            assert!(res.is_ok());
         }
     }
 
@@ -83,9 +85,10 @@ mod tests {
                 name: String::from("device 74894"),
             }],
             "device 74894",
+            error::IntelligentErrors::DeviceWithThisNameAlreadyExists,
         )];
 
-        for (devices, push_device) in tests {
+        for (devices, push_device, expected_err) in tests {
             let mut r = Room {
                 name: String::new(),
                 devices,
@@ -93,10 +96,9 @@ mod tests {
 
             let res = r.push_device(String::from(push_device));
             assert!(res.is_err());
-            assert_eq!(
-                res,
-                Err(String::from("device with this name already exists"))
-            )
+
+            let expected_err = error::IntelligentError { err: expected_err };
+            assert_eq!(res.unwrap_err().to_string(), expected_err.to_string());
         }
     }
 }

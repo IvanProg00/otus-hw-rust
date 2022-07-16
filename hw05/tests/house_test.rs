@@ -40,10 +40,10 @@ fn test_house_new_with_devices() {
     let room = opt.unwrap();
     assert_eq!(room.get_name(), "room 1");
 
-    assert_eq!(room.push_device(String::from("device 2")), Ok(()));
-    assert_eq!(room.push_device(String::from("device 1")), Ok(()));
-    assert_eq!(room.push_device(String::from("device 3")), Ok(()));
-    assert_eq!(room.push_device(String::from("device 4")), Ok(()));
+    assert!(room.push_device(String::from("device 2")).is_ok());
+    assert!(room.push_device(String::from("device 1")).is_ok());
+    assert!(room.push_device(String::from("device 3")).is_ok());
+    assert!(room.push_device(String::from("device 4")).is_ok());
 
     let devices = room.list_devices();
     assert_eq!(devices.len(), 4);
@@ -77,10 +77,10 @@ fn test_create_report() {
         let room_2 = h.get_room_mut(1).unwrap();
         assert_eq!(room_2.get_name(), "room 2");
 
-        assert_eq!(room_2.push_device(String::from("device 9")), Ok(()));
-        assert_eq!(room_2.push_device(String::from("device 8")), Ok(()));
-        assert_eq!(room_2.push_device(String::from("device 6")), Ok(()));
-        assert_eq!(room_2.push_device(String::from("device 7")), Ok(()));
+        assert!(room_2.push_device(String::from("device 9")).is_ok());
+        assert!(room_2.push_device(String::from("device 8")).is_ok());
+        assert!(room_2.push_device(String::from("device 6")).is_ok());
+        assert!(room_2.push_device(String::from("device 7")).is_ok());
     }
 
     assert_eq!(

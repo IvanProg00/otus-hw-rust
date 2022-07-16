@@ -148,8 +148,8 @@ mod tests {
             let res = r.push_room(String::from(push_room));
             assert!(res.is_err());
 
-            let expected = error::IntelligentError { err: expected_err };
-            assert_eq!(res.unwrap_err().to_string(), expected.to_string());
+            let expected_err = error::IntelligentError { err: expected_err };
+            assert_eq!(res.unwrap_err().to_string(), expected_err.to_string());
         }
     }
 }
