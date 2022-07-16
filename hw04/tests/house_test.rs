@@ -99,7 +99,6 @@ fn test_create_report() {
         h.get_room(0).unwrap().get_device(3).unwrap().get_name(),
         "device 3"
     );
-
     assert_eq!(
         h.get_room(1).unwrap().get_device(0).unwrap().get_name(),
         "device 9"
@@ -116,7 +115,6 @@ fn test_create_report() {
         h.get_room(1).unwrap().get_device(3).unwrap().get_name(),
         "device 7"
     );
-
     assert_eq!(
         h.create_report(),
         String::from(
