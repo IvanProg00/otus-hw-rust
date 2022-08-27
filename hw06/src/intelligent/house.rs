@@ -151,15 +151,122 @@ mod tests {
         )];
 
         for (rooms, push_room, expected_err) in tests {
-            let mut r = House {
+            let mut h = House {
                 name: String::new(),
                 rooms,
             };
 
-            let res = r.push_room(String::from(push_room));
+            let res = h.push_room(String::from(push_room));
             assert!(res.is_err());
 
             let expected_err = error::IntelligentError { err: expected_err };
+            assert_eq!(res.unwrap_err().to_string(), expected_err.to_string());
+        }
+    }
+
+    #[test]
+    fn test_delete_room() {
+        let tests = [
+            (
+                vec![Room {
+                    name: String::from("room 48"),
+                    devices: Vec::new(),
+                }],
+                0,
+                0,
+            ),
+            (
+                vec![
+                    Room {
+                        name: String::from("room 14"),
+                        devices: Vec::new(),
+                    },
+                    Room {
+                        name: String::from("room 48"),
+                        devices: Vec::new(),
+                    },
+                ],
+                0,
+                1,
+            ),
+            (
+                vec![
+                    Room {
+                        name: String::from("room 94"),
+                        devices: Vec::new(),
+                    },
+                    Room {
+                        name: String::from("room 41"),
+                        devices: Vec::new(),
+                    },
+                    Room {
+                        name: String::from("room 39"),
+                        devices: Vec::new(),
+                    },
+                ],
+                1,
+                2,
+            ),
+        ];
+
+        for (rooms, id, exp_len) in tests {
+            let mut h = House {
+                name: String::new(),
+                rooms,
+            };
+
+            let res = h.delete_room(id);
+            assert!(res.is_ok());
+
+            assert_eq!(h.rooms.len(), exp_len);
+        }
+    }
+
+    #[test]
+    fn test_delete_room_error() {
+        let tests = [
+            (
+                vec![Room {
+                    name: String::from("room 48"),
+                    devices: Vec::new(),
+                }],
+                1,
+                1,
+                error::IntelligentErrors::RoomNotFound,
+            ),
+            (
+                vec![
+                    Room {
+                        name: String::from("room 94"),
+                        devices: Vec::new(),
+                    },
+                    Room {
+                        name: String::from("room 41"),
+                        devices: Vec::new(),
+                    },
+                    Room {
+                        name: String::from("room 39"),
+                        devices: Vec::new(),
+                    },
+                ],
+                4,
+                3,
+                error::IntelligentErrors::RoomNotFound,
+            ),
+        ];
+
+        for (rooms, id, exp_len, exp_err) in tests {
+            let mut h = House {
+                name: String::new(),
+                rooms,
+            };
+
+            let res = h.delete_room(id);
+            assert!(res.is_err());
+
+            assert_eq!(h.rooms.len(), exp_len);
+
+            let expected_err = error::IntelligentError { err: exp_err };
             assert_eq!(res.unwrap_err().to_string(), expected_err.to_string());
         }
     }
