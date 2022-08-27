@@ -111,4 +111,101 @@ mod tests {
             assert_eq!(res.unwrap_err().to_string(), expected_err.to_string());
         }
     }
+
+    #[test]
+    fn test_delete_device() {
+        let tests = [
+            (
+                vec![Device {
+                    name: String::from("device 33"),
+                }],
+                0,
+                0,
+            ),
+            (
+                vec![
+                    Device {
+                        name: String::from("room 14"),
+                    },
+                    Device {
+                        name: String::from("room 48"),
+                    },
+                ],
+                0,
+                1,
+            ),
+            (
+                vec![
+                    Device {
+                        name: String::from("room 94"),
+                    },
+                    Device {
+                        name: String::from("room 41"),
+                    },
+                    Device {
+                        name: String::from("room 39"),
+                    },
+                ],
+                1,
+                2,
+            ),
+        ];
+
+        for (devices, id, exp_len) in tests {
+            let mut h = Room {
+                name: String::new(),
+                devices,
+            };
+
+            let res = h.delete_device(id);
+            assert!(res.is_ok());
+
+            assert_eq!(h.devices.len(), exp_len);
+        }
+    }
+
+    #[test]
+    fn test_delete_room_error() {
+        let tests = [
+            (
+                vec![Device {
+                    name: String::from("room 48"),
+                }],
+                1,
+                1,
+                error::IntelligentErrors::DeviceNotFound,
+            ),
+            (
+                vec![
+                    Device {
+                        name: String::from("room 94"),
+                    },
+                    Device {
+                        name: String::from("room 41"),
+                    },
+                    Device {
+                        name: String::from("room 39"),
+                    },
+                ],
+                4,
+                3,
+                error::IntelligentErrors::DeviceNotFound,
+            ),
+        ];
+
+        for (devices, id, exp_len, exp_err) in tests {
+            let mut h = Room {
+                name: String::new(),
+                devices,
+            };
+
+            let res = h.delete_device(id);
+            assert!(res.is_err());
+
+            assert_eq!(h.devices.len(), exp_len);
+
+            let expected_err = error::IntelligentError { err: exp_err };
+            assert_eq!(res.unwrap_err().to_string(), expected_err.to_string());
+        }
+    }
 }
